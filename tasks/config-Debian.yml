@@ -1,0 +1,36 @@
+---
+- name: Stop svc ufw firewall
+  ansible.builtin.service:
+    name: ufw
+    state: stopped
+
+- name: Deploy PXC config.
+  template:
+    src: my.cnf.j2
+    dest: "{{ pxc_path_config }}"
+    owner: mysql
+    group: mysql
+    mode: 0644
+    validate: /usr/sbin/mysqld --default-file={{ pxc_path_config }} --validate-config
+  notify: 
+    - started
+    - Start bootstrap-pxc
+    - restarted
+
+- name: Deploy pxc config.
+  template:
+    src: pxc.logrotate.j2
+    dest: /etc/logrotate.d/mysql
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create database user with name
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{pxc_root_pwd}}"
+    name: "{{wsrep_sst_auth_user}}"
+    password: "{{wsrep_sst_auth_pwd}}"
+    priv: "{{wsrep_sst_priv}}"
+    state: present
+  when: "'master' in group_names"

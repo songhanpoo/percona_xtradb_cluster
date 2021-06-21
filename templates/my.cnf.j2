@@ -1,0 +1,35 @@
+[mysqld]
+
+datadir={{pxc_datadir}}
+user={{pxc_user}}
+
+# Path to Galera library
+wsrep_provider=/usr/lib/libgalera_smm.so
+
+socket=/var/lib/mysql/mysql.sock
+
+pid-file=/var/run/mysqld/{{inventory_hostname}}.pid
+
+# Cluster connection URL contains the IPs of node#1, node#2 and node#3
+wsrep_cluster_address=gcomm://{{node_ips_self_exclude}}
+
+# In order for Galera to work correctly binlog format should be ROW
+binlog_format={{pxc_binlog_format}}
+
+# MyISAM storage engine has only experimental support
+default_storage_engine={{pxc_default_storage_engine}}
+
+# This changes how InnoDB autoincrement locks are managed and is a requirement for Galera
+innodb_autoinc_lock_mode={{pxc_innodb_autoinc_lock_mode}}
+
+# Node #1 address
+wsrep_node_address={{ansible_host}}
+
+# SST method
+wsrep_sst_method=xtrabackup-v2
+
+# Cluster name
+wsrep_cluster_name=my_ubuntu_cluster
+
+# Authentication for SST method
+wsrep_sst_auth="{{wsrep_sst_auth_user}}:{{wsrep_sst_auth_pwd}}"

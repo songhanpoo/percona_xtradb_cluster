@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  gather_facts: true
+  roles:
+  - {role: 'percona_xtradb_cluster',tags: 'pxc'}
+  vars:
+#-------PXC--------#
+    pxc_datadir: /var/lib/mysql
+    pxc_user: mysql
+    # In order for Galera to work correctly binlog format should be ROW
+    pxc_binlog_format: ROW
+    # Using the MyISAM storage engine is not recommended
+    pxc_default_storage_engine: InnoDB
+    # This InnoDB autoincrement locking mode is a requirement for Galera
+    pxc_innodb_autoinc_lock_mode: 2
+    wsrep_sst_auth_user: sstuser
+    wsrep_sst_auth_pwd: s3cretPass"
+    wsrep_sst_priv: "*.*:ALL,GRANT"
+    pxc_root_pwd: root
+    xtrabackup_backup_user: backup
+    xtrabackup_backup_pwd: backup
+    xtrabackup_backup_grant: "*.*:GRANT RELOAD, LOCK TABLES, REPLICATION CLIENT, CREATE TABLESPACE, PROCESS, SUPER, CREATE, INSERT, SELECT"
+    xtrabackup_encrypt_location:
+    xtrabackup_target_dir:
+    xtrabckup_type: full
+    defaults_file:
+    log_file:

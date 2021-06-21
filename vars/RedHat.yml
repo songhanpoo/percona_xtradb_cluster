@@ -1,0 +1,4 @@
+
+mysql_package_name: mysql
+mysql_path_config: /etc/mysql/my.conf
+mysql_path_repo: /etc/yum.repos.d/

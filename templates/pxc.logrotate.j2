@@ -1,0 +1,9 @@
+/var/log/mysql/*.log {
+    compress
+    maxsize 300M
+    maxage 365
+    dateformat -%Y%m%d%s
+    daily
+    rotate 30
+    notifempty
+}

@@ -1,0 +1,3 @@
+pxc_package_name: percona-xtradb-cluster-56
+pxc_path_config: /etc/mysql/my.cnf
+node_ips_self_exclude: "{{ groups['all'] | map('extract', hostvars, ['ip']) | join(',') }}"

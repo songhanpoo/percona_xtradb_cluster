@@ -1,0 +1,28 @@
+---
+- name: Start service mysql, if not started
+  ansible.builtin.service:
+    name: mysql
+    state: started
+  listen: started
+  when: "'backup' in group_names"
+
+
+- name: Start service mysql, if not started
+  ansible.builtin.service:
+    name: mysql
+    state: reloaded
+  listen: reloaded
+  when: "'backup' in group_names"
+
+- name: Start service mysql, if not started
+  ansible.builtin.service:
+    name: mysql
+    state: restarted
+  listen: restarted
+  when: "'backup' in group_names"
+
+- name: Setup Root pwd cluster
+  shell: |
+    /etc/init.d/mysql bootstrap-pxc
+  listen: Start bootstrap-pxc
+  when: "'master' in group_names"
